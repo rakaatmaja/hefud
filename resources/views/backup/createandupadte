@@ -1,0 +1,42 @@
+   <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        
+            const addNewProduct = () => {
+                const newProduct = {
+                    nama_produk: 'Nama Produk Baru',
+                    desk_produk: 'Deskripsi Produk Baru',
+                    harga_produk: 100, // Ganti dengan harga yang sesuai
+                    stok_produk: 10, // Ganti dengan stok yang sesuai
+                    id_kategori: 1, // Ganti dengan ID kategori yang sesuai
+                    gambar_produk: 'url_gambar_produk.jpg' // Ganti dengan URL gambar yang sesuai
+                };
+
+                axios.post('/api/produk', newProduct)
+                    .then(response => {
+                        console.log(response.data);
+                        // Lakukan sesuatu setelah menambahkan produk
+                        // Contoh: Tampilkan pesan sukses, refresh halaman, dll.
+                    })
+                    .catch(error => {
+                        console.error('Error adding new product:', error);
+                        // Tampilkan pesan error kepada pengguna jika diperlukan
+                    });
+            };
+
+            addNewProduct();
+
+            // Fungsi untuk menangani PUT/PATCH produk berdasarkan ID
+            const updateProduct = (id, updatedData) => {
+                axios.put(`/api/produk/${id}`, updatedData)
+                    .then(response => {
+                        console.log(response.data);
+                        // Lakukan sesuatu setelah mengupdate produk
+                        // Contoh: Tampilkan pesan sukses, refresh halaman, dll.
+                    })
+                    .catch(error => {
+                        console.error('Error updating product:', error);
+                        // Tampilkan pesan error kepada pengguna jika diperlukan
+                    });
+            };
+        });
+    </script>
