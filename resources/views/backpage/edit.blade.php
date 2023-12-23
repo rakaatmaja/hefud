@@ -83,7 +83,7 @@
 
             const updateProduct = (id) => {
                 const formData = new FormData(document.getElementById('productForm'));
-                axios.put(`/api/produk/edit/${id}`, formData)
+                axios.get(`/api/produk/edit/${id}`, formData)
                     .then(response => {
                         console.log(response.data);
 

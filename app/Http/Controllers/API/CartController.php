@@ -7,7 +7,7 @@ use App\Models\Kategori;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
-class ProdukController extends Controller
+class CartController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,22 +16,17 @@ class ProdukController extends Controller
      */
     public function index()
     {
-        //
-        $produk = new Produk;
-        if (isset($_GET['s'])) {
-            $s = $_GET['s'];
-            //melakukan query like berdasarkan param nama
-            $produk = $produk->where('nama_produk', 'like', "%$s%");
-        }
-
-        if (isset($_GET['id_kategori']) && $_GET['id_kategori'] != '') {
-            $produk = $produk->where('id_kategori', $_GET['id_kategori']);
-        }
-
-        $produk = $produk->paginate(5);
-        $kategori = Kategori::all();
-        return view('backpage.admin', compact('produk', 'kategori'));
+        
     }
+
+    public function addToCart(Request $request, $productId)
+    {
+        // Your logic to add the product to the cart using cookies or session
+        // ...
+
+        return redirect()->back()->with('success', 'Product added to cart successfully.');
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -117,7 +112,7 @@ class ProdukController extends Controller
         }
     }
 
-    
+
 
     /**
      * Update the specified resource in storage.

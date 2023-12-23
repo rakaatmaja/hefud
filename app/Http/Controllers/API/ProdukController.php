@@ -7,6 +7,8 @@ use App\Models\Kategori;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Session;
+
 
 class ProdukController extends Controller
 {
@@ -15,6 +17,61 @@ class ProdukController extends Controller
         $produk = Produk::all();
         return response()->json($produk, 200);
     }
+
+    public function kategori(){
+        $kategori = Kategori::all();
+        return response()->json($kategori, 200);
+    }
+
+    public function addToCartApi(Request $request, $id)
+    {
+        $produk = Produk::findOrFail($id);
+
+        // Mendapatkan keranjang dari sesi
+        $cart = Session::get('cart', []);
+
+        // Jika produk sudah ada di dalam keranjang, tambahkan jumlahnya
+        if (isset($cart[$id])) {
+            $cart[$id]['stok_produk'] += $request->input('stok_produk', 1);
+        } else {
+            // Jika produk belum ada di dalam keranjang, tambahkan ke keranjang
+            $cart[$id] = [
+                "nama_produk" => $produk->nama_produk,
+                "desk_produk" => $produk->desk_produk,
+                "harga_produk" => $produk->harga_produk,
+                "gambar_produk" => $produk->gambar_produk,
+                "stok_produk" => $request->input('stok_produk', 1),
+            ];
+        }
+
+        // Menyimpan keranjang kembali ke sesi
+        Session::put('cart', $cart);
+
+        return response()->json(['cart' => $cart, 'message' => 'Product added to cart successfully'], 200);
+    }
+    
+    public function somePage()
+{
+    // ... logic lainnya
+
+    // Panggil fungsi showCartView() dan sertakan $cartItems ke dalam view
+    return $this->showCartView();
+}
+
+
+public function showCart()
+{
+    // Mendapatkan keranjang dari sesi, atau array kosong jika belum ada
+    $cartItems = Session::get('cart', []);
+
+    // ... (kode lanjutan untuk menampilkan keranjang)
+
+    // Kemudian, kirim variabel $cartItems ke view
+    return view('frontpage.landingpage', ['cartItems' => $cartItems]);
+}
+
+
+
 
     public function create()
     {

@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use App\Models\Produk;
 use Illuminate\Http\Request;
-use App\Models\Tb_produk;
-use App\Models\Tb_kategori;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
@@ -22,13 +23,13 @@ class HomeController extends Controller
                 $produk = Produk::all();
                 return view('frontpage.landingpage', compact('produk'));
             } else if ($role == 'admin') {
-                $kategori = Produk::all();
-                $produk = Produk::all();
-                return view('backpage.admin', compact('kategori', 'produk'));
+             
+                $kategori = Kategori::all();
+                // $produk = Produk::all();
+                return view('backpage.admin', compact('kategori'));
             }
         } else {
-            return view('frontpage.landingpage', compact('produk'));
-            // return view('welcome');
+            return view('frontpage.landingpage', compact('produk'));;
         }
     }
 

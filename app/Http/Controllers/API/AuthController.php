@@ -58,4 +58,23 @@ class AuthController extends Controller
         ], 200);
         return redirect('/');
     }
+
+    public function getLoggedInUser()
+    {
+        // Pastikan ada pengguna yang sudah login sebelumnya
+        if (Auth::check()) {
+            // Ambil data pengguna yang sedang login
+            $user = Auth::user();
+
+            // Kembalikan data pengguna sebagai respons JSON
+            return response()->json([
+                'user' => $user
+            ]);
+        }
+
+        // Jika tidak ada pengguna yang login, kembalikan respons kosong atau pesan error
+        return response()->json([
+            'message' => 'No user logged in'
+        ], 404);
+    }
 }

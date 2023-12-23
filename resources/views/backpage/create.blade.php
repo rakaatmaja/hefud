@@ -85,7 +85,7 @@
     
                 Swal.fire({
                     icon: 'success',
-                    title:'Add data Successful!',
+                    title:'Add data Successful!',   
                     text: 'You will be redirected to the homepage.',
                 }).then(() => {
                     if (response.data) {
@@ -103,7 +103,7 @@
             });
             };
 
-          
+
 
             document.getElementById('productForm').addEventListener('submit', function (e) {
     e.preventDefault();

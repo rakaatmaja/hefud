@@ -10,13 +10,12 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//LOGIN REGISTER
-Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
+// //LOGIN REGISTER
+// Route::post('login', [AuthController::class, 'login']);
+// Route::post('register', [AuthController::class, 'register']);
 
 
-Route::apiResource('produk', ProdukController::class);
-Route::get('/produk', [ProdukController::class, 'index']);
+
 
 // Route::post('/admin/store', [ProdukController::class, 'store']);
 // Route::put('/admin/update/{id}', [ProdukController::class, 'update']);

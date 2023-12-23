@@ -30,7 +30,7 @@
         <div class="min-h-screen bg-gray-100">
         {{-- membuat komponen navigation untuk home --}}
         {{-- basenya bisa menggunakan layouts.navigation, hanya saja hilangkan bagian menu login --}}
-            @include('layouts.navigationhome')
+            {{-- @include('layouts.navigationhome') --}}
             <!-- Page Content -->
             <main>
                 {{-- SLot untuk halaman konten yang berubah dinamis

@@ -37,14 +37,29 @@ Route::group(['middleware' => ['auth', 'guest']], function () {
     Route::resource('admin', ProdukController::class);
 });
 
-// API
+// API LOGIN
 Route::post('/api/login', 'API\AuthController@login')->name('api.login');
 Route::post('/api/register', 'API\AuthController@register')->name('api.register');
+Route::get('/api/user', 'API\AuthController@getLoggedInUser');
 
-Route::apiResource('produk', ProdukController::class);
-Route::get('/produk', [ProdukController::class, 'index']);
+// API PRODUK
+Route::get('/api/produk', 'API\ProdukController@index');
+Route::get('/api/kategori', 'API\ProdukController@kategori');
 
 Route::get('/create', [ProdukController::class, 'create'])->name('backpage.create');
+
+// Cart
+// Route::post('/addtocart/{id}', [ProdukController::class, 'addToCartApi']);
+// web.php atau routes.php
+Route::post('/api/addtocart/{id}', 'API\ProdukController@addToCartAPI');
+Route::get('/some-page', 'ProdukController@somePage');
+
+
+
+
+
+
+
 
 // Route::post('/admin/store', [ProdukController::class, 'store'])->name('api.store');
 // Route::put('/admin/update/{id}', [ProdukController::class, 'update'])->name('api.update');

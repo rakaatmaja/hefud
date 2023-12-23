@@ -1,6 +1,7 @@
 
 <script src="{{asset('js/cart.js')}}" defer></script>
-<div x-data="{ isOpen: false, cartOpen: false }" class="bg-white">
+<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+<div x-data="{ isOpen: false, cartOpen: false, cartItems: window.cartItems || [] }" class="bg-white">
   <div class="container mx-auto px-6 py-5">
     <div class="flex items-center justify-between">
       <div class="hidden w-full text-gray-600 md:flex md:items-center">
@@ -26,21 +27,26 @@
                 </div>
             @endif
       </div>
-      <div class="flex items-center justify-end w-full">
-        
-        <button @click="cartOpen = !cartOpen" class="text-gray-600 focus:outline-none mx-4 sm:mx-0">
+
+      {{-- CART --}}
+     <div class="container">
+      <div class="cartOpen flex items-center justify-end w-full">
+      <button @click="cartOpen = !cartOpen" class="text-gray-600 focus:outline-none mx-4 sm:mx-0" data-toggle="cartOpen">
+          {{-- <span>{{ cartItems.length }}</span> --}}
           <svg xmlns="http://www.w3.org/2000/svg" class="shrink-0 mr-3 h-9 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
           </svg>
-        </button>
-        <div class="flex sm:hidden">
+      </button>
+      <div class="flex sm:hidden">
           <button @click="isOpen = !isOpen" type="button" class="text-gray-600 hover:text-gray-500 focus:outline-none focus:text-gray-500" aria-label="toggle menu">
-            <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current">
-              <path fill-rule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
-            </svg>
+              <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current">
+                  <path fill-rule="evenodd" d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"></path>
+              </svg>
           </button>
-        </div>
       </div>
+  </div>
+     </div>
+
     </div>
     <nav :class="isOpen ? '' : 'hidden'" class="sm:flex sm:justify-center sm:items-center mt-3">
       <div class="flex flex-col sm:flex-row">
@@ -84,24 +90,6 @@
       </div>
       <span class="text-gray-600">20$</span>
     </div>
-    <div class="flex justify-between mt-6">
-      <div class="flex">
-        <img class="h-20 w-20 object-cover rounded" src="https://media.suara.com/pictures/653x366/2016/05/23/o_1ajds7pv9uhhlsn1mb41jvu9iha.jpg" alt="">
-        <div class="mx-3">
-          <h3 class="text-sm text-gray-600">Salad</h3>
-          <div class="flex items-center mt-2">
-            <button class="text-gray-500 focus:outline-none focus:text-gray-600">
-              <svg class="h-5 w-5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </button>
-            <span class="text-gray-700 mx-2">2</span>
-            <button class="text-gray-500 focus:outline-none focus:text-gray-600">
-              <svg class="h-5 w-5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <span class="text-gray-600">20$</span>
-    </div>
     <div class="mt-8">
       <form class="flex items-center justify-center">
         <input class="form-input w-48" type="text" placeholder="Add promocode">
@@ -115,4 +103,36 @@
       <svg class="h-5 w-5 mx-2" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
     </a>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addToCartButtons = document.querySelectorAll('.addToCartButton');
+
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const productId = button.dataset.id;
+
+                axios.post(`/api/addtocart/${productId}`, { stok_produk: 1 })
+                    .then(response => {
+                        alert(response.data.message);
+                        console.log(response.data);
+
+                        // Update cartItems dengan data keranjang terbaru
+                        window.cartItems = response.data.cartItems;
+
+                        // Update tampilan jumlah item di keranjang
+                        document.querySelector('.cartOpen span').innerText = window.cartItems.length;
+
+                        // Mengarahkan pengguna ke halaman yang diinginkan setelah menambahkan ke keranjang
+                        window.location.href = "{{ route('home') }}";
+                    })
+                    .catch(error => {
+                        console.error('Error adding to cart:', error);
+                    });
+            });
+        });
+    });
+</script>
 </div>
